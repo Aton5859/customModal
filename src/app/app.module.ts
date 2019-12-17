@@ -1,6 +1,7 @@
+import { ModalPage } from './../pages/modal/modal';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler, Config } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
@@ -11,13 +12,18 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import {
+  ModalFromBottomEnter, ModalFromBottomLeave, ModalFromRightEnter, ModalFromRightLeave, ModalScaleEnter,
+  ModalScaleLeave
+} from './modal-transitions';
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ModalPage
   ],
   imports: [
     BrowserModule,
@@ -29,12 +35,27 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ModalPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+
+export class AppModule {
+  constructor(public config: Config) {
+    this.setCustomTransitions();
+  }
+
+  private setCustomTransitions() {
+    this.config.setTransition('modal-from-right-enter', ModalFromRightEnter);
+    this.config.setTransition('modal-from-right-leave', ModalFromRightLeave);
+    this.config.setTransition('modal-from-bottom-enter', ModalFromBottomEnter);
+    this.config.setTransition('modal-from-bottom-leave', ModalFromBottomLeave);
+    this.config.setTransition('modal-scale-enter', ModalScaleEnter);
+    this.config.setTransition('modal-scale-leave', ModalScaleLeave);
+  }
+}
